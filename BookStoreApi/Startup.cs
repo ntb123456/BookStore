@@ -98,6 +98,7 @@ namespace BookStoreApi
 
             app.UseRouting();
 
+
             app.UseAuthentication();
             app.UseAuthorization();
 

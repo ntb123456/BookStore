@@ -13,6 +13,7 @@ namespace BookStoreApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public class BooksController : ControllerBase
     {
         private readonly IBookRepository _bookRepository;

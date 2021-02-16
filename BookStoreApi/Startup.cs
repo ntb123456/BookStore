@@ -19,6 +19,7 @@ using BookStoreApi.Contracts;
 using BookStoreApi.Services;
 using BookStoreAPI.Mappings;
 
+
 namespace BookStoreApi
 {
     public class Startup
@@ -36,8 +37,11 @@ namespace BookStoreApi
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            // services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+
+            _ = services.AddDefaultIdentity<IdentityUser>()
+               .AddRoles<IdentityRole>()
+               .AddEntityFrameworkStores<ApplicationDbContext>();
             // services.AddRazorPages();
 
 
@@ -71,7 +75,11 @@ namespace BookStoreApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, 
+            IWebHostEnvironment env,
+            UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager)
+
         {
             if (env.IsDevelopment())
             {
@@ -99,6 +107,7 @@ namespace BookStoreApi
             //app.UseStaticFiles();
 
             app.UseCors("CorsPolicy");
+            SeedData.Seed(userManager, roleManager).Wait();
 
             app.UseRouting();
 
